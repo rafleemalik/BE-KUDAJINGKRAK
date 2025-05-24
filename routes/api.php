@@ -2,10 +2,36 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin\CarController;
+use App\Http\Controllers\API\CarController;
+use App\Http\Controllers\API\AuthController;
 
-// Route untuk menambah mobil
-Route::post('/cars', [CarController::class, 'store']);
+/*
+|--------------------------------------------------------------------------
+| API Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register API routes for your application. These
+| routes are loaded by the RouteServiceProvider and all of them will
+| be assigned to the "api" middleware group. Make something great!
+|
+*/
 
-// Route untuk mengambil semua mobil (opsional, jika ingin ada GET)
-Route::get('/cars', [CarController::class, 'index']);
+// Auth Routes
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
+
+// Protected Routes
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/user', [AuthController::class, 'user']);
+    Route::post('/logout', [AuthController::class, 'logout']);
+
+    // Car Routes
+    Route::prefix('cars')->group(function () {
+        Route::get('/', [CarController::class, 'index']);
+        Route::get('/{id}', [CarController::class, 'show']);
+        Route::post('/', [CarController::class, 'store']);
+        Route::put('/{id}', [CarController::class, 'update']);
+        Route::delete('/{id}', [CarController::class, 'destroy']);
+        Route::get('/type/{type}', [CarController::class, 'getByType']);
+    });
+});

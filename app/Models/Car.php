@@ -10,6 +10,14 @@ class Car extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name', 'price', 'image', 'specifications', 'type'
+        'name',
+        'description',
+        'price',
+        'image',
+        'type'
+    ];
+
+    protected $casts = [
+        'price' => 'float'
     ];
 }
