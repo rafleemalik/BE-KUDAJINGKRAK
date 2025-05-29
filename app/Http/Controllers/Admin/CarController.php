@@ -60,11 +60,10 @@ class CarController extends Controller
         ]);
 
         return response()->json([
+            'success' => true,
             'message' => 'Car created successfully!',
             'car' => $car
         ], 201);
-
-        dd($request->all(), $request->file('image'));
     }
 
     // Menghapus mobil
@@ -77,36 +76,44 @@ class CarController extends Controller
     // Update mobil
     public function update(Request $request, Car $car)
     {
-        $request->validate([
-            'name' => 'required|max:255',
-            'price' => 'required|numeric',
-            'image' => 'nullable|mimes:jpeg,png,jpg,gif,svg|max:5000',
-            'specifications' => 'required',
-            'type' => 'required|in:sport,hybrid,gt,suv',
-        ]);
+        try {
+            $request->validate([
+                'name' => 'required|max:255',
+                'price' => 'required|numeric',
+                'image' => 'nullable|mimes:jpeg,png,jpg,gif,svg|max:5000',
+                'specifications' => 'required',
+                'type' => 'required|in:sport,hybrid,gt,suv',
+            ]);
 
-        if ($request->hasFile('image')) {
-            // Delete old image if exists
-            if ($car->image) {
-                Storage::delete('public/' . $car->image);
+            // Update car data
+            $car->name = $request->name;
+            $car->price = $request->price;
+            $car->specifications = $request->specifications;
+            $car->type = $request->type;
+
+            if ($request->hasFile('image')) {
+                // Delete old image if exists
+                if ($car->image) {
+                    Storage::delete('public/' . $car->image);
+                }
+                // Store new image
+                $imagePath = $request->file('image')->store('car_images', 'public');
+                $car->image = $imagePath;
             }
-            
-            // Store new image
-            $imagePath = $request->file('image')->store('car_images', 'public');
-            $car->image = $imagePath;
+
+            $car->save();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Car updated successfully!',
+                'car' => $car->fresh()
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to update car: ' . $e->getMessage()
+            ], 500);
         }
-
-        // Update other fields
-        $car->name = $request->name;
-        $car->price = $request->price;
-        $car->specifications = $request->specifications;
-        $car->type = $request->type;
-        $car->save();
-
-        return response()->json([
-            'message' => 'Car updated successfully!',
-            'car' => $car
-        ]);
     }
 
     

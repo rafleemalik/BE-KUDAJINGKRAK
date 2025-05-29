@@ -269,12 +269,15 @@ const addCar = () => {
 
 const editCar = (index) => {
   const carToEdit = filteredCars.value[index]
-  // Find the actual index in the original cars array
-  const originalIndex = cars.value.findIndex(car => car.id === carToEdit.id)
-  if (originalIndex !== -1) {
-    editCarData.value = { ...cars.value[originalIndex] }
-    editMode.value = true
+  editCarData.value = {
+    id: carToEdit.id,
+    model: carToEdit.name,
+    price: carToEdit.price,
+    specs: carToEdit.specifications,
+    type: carToEdit.type,
+    image: null
   }
+  editMode.value = true
 }
 
 const updateCar = () => {
@@ -285,17 +288,22 @@ const updateCar = () => {
   formData.append('price', editCarData.value.price)
   formData.append('specifications', editCarData.value.specs)
   formData.append('type', editCarData.value.type)
-  if (editCarData.value.image) formData.append('image', editCarData.value.image)
+  if (editCarData.value.image) {
+    formData.append('image', editCarData.value.image)
+  }
+  formData.append('_method', 'PUT')
 
-  axios.post(`/api/cars/${editCarData.value.id}?_method=PUT`, formData, {
+  axios.post(`/api/cars/${editCarData.value.id}`, formData, {
     headers: { 'Content-Type': 'multipart/form-data' },
   }).then(res => {
-    const index = cars.value.findIndex(car => car.id === res.data.car.id)
-    if (index !== -1) cars.value.splice(index, 1, res.data.car)
+    const index = cars.value.findIndex(car => car.id === editCarData.value.id)
+    if (index !== -1) {
+      cars.value[index] = res.data.car
+    }
     editMode.value = false
     editCarData.value = { id: null, model: '', price: '', specs: '', image: null, type: '' }
     errors.value.price = ''
-  }).catch(err => console.error('Error:', err.response.data))
+  }).catch(err => console.error('Error updating car:', err.response?.data || err))
 }
 
 const cancelEdit = () => {
