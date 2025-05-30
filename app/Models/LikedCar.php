@@ -2,20 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Purchase extends Model
+class LikedCar extends Model
 {
-    use HasFactory;
-
     protected $fillable = [
         'user_id',
-        'car_id',
-        'price',
-        'status',
-        'purchase_date'
+        'car_id'
     ];
 
     public function user(): BelongsTo

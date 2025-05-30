@@ -1,14 +1,14 @@
 <template>
   <div class="min-h-screen bg-black text-white w-full overflow-x-hidden">
-    <!-- Notification Toast -->
+    <!-- Notification Toast dengan animasi yang lebih smooth -->
     <div v-if="showNotification" 
-         class="fixed top-4 right-4 z-50 transform transition-all duration-500"
+         class="fixed top-4 right-4 z-50 transform transition-all duration-700 ease-in-out"
          :class="[
-           showNotification ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0',
-           notificationType === 'success' ? 'bg-green-500' : 'bg-red-500'
+           showNotification ? 'translate-x-0 opacity-100 scale-100' : 'translate-x-full opacity-0 scale-95',
+           notificationType === 'success' ? 'bg-gradient-to-r from-green-500 to-green-600' : 'bg-gradient-to-r from-red-500 to-red-600'
          ]">
-      <div class="flex items-center p-4 rounded-lg shadow-lg">
-        <div class="flex-shrink-0">
+      <div class="flex items-center p-4 rounded-xl shadow-2xl backdrop-blur-sm">
+        <div class="flex-shrink-0 animate-bounce">
           <svg v-if="notificationType === 'success'" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
           </svg>
@@ -23,7 +23,8 @@
         </div>
         <div class="ml-auto pl-3">
           <div class="-mx-1.5 -my-1.5">
-            <button @click="showNotification = false" class="inline-flex rounded-md p-1.5 text-white hover:bg-white/10 focus:outline-none">
+            <button @click="showNotification = false" 
+                    class="inline-flex rounded-md p-1.5 text-white hover:bg-white/10 focus:outline-none transition-all duration-300">
               <span class="sr-only">Dismiss</span>
               <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                 <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
@@ -33,22 +34,44 @@
         </div>
       </div>
     </div>
-    <!-- Header dengan Profile -->
-    <div class="sticky top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-sm border-b border-gray-800">
+    <!-- Header dengan efek glassmorphism yang lebih modern -->
+    <div class="sticky top-0 left-0 right-0 z-50 bg-black/40 backdrop-blur-xl border-b border-white/10">
       <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
         <div class="flex items-center gap-4">
-          <button @click="showProfile = !showProfile" class="flex items-center gap-2 hover:text-red-500 transition-colors">
-            <img :src="user.profile_photo || '/images/leclerc.jpg'" 
-                 alt="Profile" 
-                 class="w-10 h-10 rounded-full object-cover border-2 border-red-500">
-            <span>{{ user.name }}</span>
+          <button @click="showProfile = !showProfile" 
+                  class="flex items-center gap-2 hover:text-red-500 transition-all duration-300 group">
+            <div class="relative">
+              <img :src="user.profile_photo || '/images/leclerc.jpg'" 
+                   alt="Profile" 
+                   class="w-12 h-12 rounded-full object-cover border-2 border-red-500 transition-all duration-300 group-hover:scale-110 group-hover:border-red-400">
+              <div class="absolute inset-0 rounded-full bg-gradient-to-r from-red-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            </div>
+            <div class="flex flex-col items-start">
+              <span class="font-medium text-white">{{ user.name }}</span>
+              <span class="text-sm text-gray-400">{{ user.username }}</span>
+            </div>
           </button>
         </div>
-        
-        <!-- Logout Button -->
+
+        <!-- Ciao Greeting -->
+        <div class="flex items-center gap-2 animate-fade-in">
+          <span class="text-2xl font-['Playfair_Display'] font-bold text-white">
+            Ciao,
+          </span>
+          <span class="text-xl font-medium text-white">
+            {{ user.name }}
+          </span>
+          <div class="w-1 h-6 bg-gradient-to-b from-red-500 to-transparent rounded-full"></div>
+        </div>
+
+        <!-- Logout Button dengan efek hover yang lebih menarik -->
         <form @submit.prevent="logout">
-          <button type="submit" class="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-full transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-red-500/50 flex items-center gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+          <button type="submit" 
+                  class="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white px-6 py-2 rounded-full transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-red-500/50 flex items-center gap-2 group">
+            <svg xmlns="http://www.w3.org/2000/svg" 
+                 class="h-5 w-5 transform transition-transform duration-300 group-hover:translate-x-1" 
+                 viewBox="0 0 20 20" 
+                 fill="currentColor">
               <path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd" />
             </svg>
             Logout
@@ -93,13 +116,27 @@
                     <p class="text-gray-400">Order Date: {{ new Date(order.purchase_date).toLocaleDateString() }}</p>
                     <p class="text-red-500 font-medium">${{ order.price.toLocaleString() }}</p>
                   </div>
-                  <span :class="[
-                    'px-3 py-1 rounded-full text-sm',
-                    order.status === 'completed' ? 'bg-green-500' : 
-                    order.status === 'cancelled' ? 'bg-red-500' : 'bg-yellow-500'
-                  ]">
-                    {{ order.status }}
-                  </span>
+                  <div class="flex flex-col items-end gap-2">
+                    <span :class="[
+                      'px-3 py-1 rounded-full text-sm',
+                      order.status === 'completed' ? 'bg-green-500' : 
+                      order.status === 'cancelled' ? 'bg-red-500' : 'bg-yellow-500'
+                    ]">
+                      {{ order.status }}
+                    </span>
+                    <div class="flex gap-2">
+                      <button v-if="order.status === 'pending'"
+                              @click="updateOrderStatus(order, 'completed')"
+                              class="px-3 py-1 bg-green-600 hover:bg-green-700 text-white rounded-lg text-sm transition-all duration-300">
+                        Complete
+                      </button>
+                      <button v-if="order.status === 'pending'"
+                              @click="updateOrderStatus(order, 'cancelled')"
+                              class="px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded-lg text-sm transition-all duration-300">
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -134,31 +171,54 @@
       </div>
     </div>
 
-    <!-- Hero Section dengan Parallax -->
+    <!-- Hero Section dengan efek parallax yang lebih dinamis -->
     <div class="relative h-screen w-full overflow-hidden">
       <div class="absolute inset-0">
         <img src="/public/images/lewis-hamilton-ferrari.jpg" 
              alt="Ferrari Background" 
              class="w-full h-full object-cover transform scale-110 animate-zoom">
+        <div class="absolute inset-0 bg-gradient-to-r from-black/90 via-black/50 to-transparent"></div>
       </div>
-      <div class="absolute inset-0 bg-gradient-to-r from-black/80 to-red-900/50"></div>
+      
+      <!-- Floating Elements -->
+      <div class="absolute inset-0 overflow-hidden">
+        <div class="absolute top-20 left-20 w-32 h-32 bg-red-500/20 rounded-full blur-3xl animate-float"></div>
+        <div class="absolute bottom-20 right-20 w-40 h-40 bg-red-600/20 rounded-full blur-3xl animate-float-delay"></div>
+      </div>
+
       <div class="absolute inset-0 flex items-center justify-center">
         <div class="text-center transform transition-all duration-500 hover:scale-105">
-          <h1 class="text-8xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-white animate-fade-in ferrari-title">
+          <h1 class="text-8xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-red-600 via-red-500 to-white animate-fade-in ferrari-title">
             FERRARI SHOWROOM
           </h1>
           <p class="text-2xl mb-8 text-gray-300 animate-fade-in-delay">Where Dreams Meet Reality</p>
-          <button @click="scrollToShowroom" class="bg-red-600 hover:bg-red-700 text-white px-12 py-4 rounded-full transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-red-500/50 animate-fade-in-delay-2">
-            Explore Our Collection
+          <button @click="scrollToShowroom" 
+                  class="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white px-12 py-4 rounded-full transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-red-500/50 animate-fade-in-delay-2 group">
+            <span class="flex items-center gap-2">
+              Explore Our Collection
+              <svg xmlns="http://www.w3.org/2000/svg" 
+                   class="h-5 w-5 transform transition-transform duration-300 group-hover:translate-y-1" 
+                   viewBox="0 0 20 20" 
+                   fill="currentColor">
+                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+              </svg>
+            </span>
           </button>
         </div>
       </div>
+
+      <!-- Scroll Indicator -->
+      <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white/50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+        </svg>
+      </div>
     </div>
 
-    <!-- Features Section dengan Animasi -->
+    <!-- Features Section dengan card design yang lebih modern -->
     <div class="py-20 px-4 md:px-8 w-full bg-gradient-to-b from-black to-gray-900">
       <div class="max-w-7xl mx-auto w-full">
-        <h2 class="text-5xl font-bold mb-16 text-center text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-white animate-fade-in">
+        <h2 class="text-5xl font-bold mb-16 text-center text-transparent bg-clip-text bg-gradient-to-r from-red-600 via-red-500 to-white animate-fade-in">
           Why Choose Ferrari?
         </h2>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
@@ -193,27 +253,34 @@
           </div>
         </div>
 
-        <!-- Stats Section -->
+        <!-- Stats Section dengan animasi yang lebih menarik -->
         <div class="mt-20 grid grid-cols-2 md:grid-cols-4 gap-8">
           <div v-for="(stat, index) in stats" 
                :key="index"
-               class="text-center p-6 rounded-xl bg-gray-900/50 border border-gray-800 transform transition-all duration-500 hover:scale-105 hover:shadow-lg hover:shadow-red-500/20"
+               class="text-center p-6 rounded-xl bg-gray-900/50 border border-gray-800 transform transition-all duration-500 hover:scale-105 hover:shadow-lg hover:shadow-red-500/20 group"
                :class="`animate-fade-in-delay-${index + 6}`">
-            <div class="text-4xl font-bold text-red-500 mb-2">{{ stat.value }}</div>
-            <div class="text-gray-400">{{ stat.label }}</div>
+            <div class="relative">
+              <div class="absolute inset-0 bg-red-500/10 rounded-full blur-xl transform scale-0 group-hover:scale-100 transition-transform duration-500"></div>
+              <div class="text-4xl font-bold text-red-500 mb-2 transform transition-transform duration-500 group-hover:scale-110">
+                {{ stat.value }}
+              </div>
+            </div>
+            <div class="text-gray-400 group-hover:text-gray-300 transition-colors duration-300">
+              {{ stat.label }}
+            </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Gallery Section dengan Hover Effects -->
+    <!-- Showroom Section dengan card design yang lebih modern -->
     <div v-show="showShowroom" ref="showroomSection" class="py-20 w-full bg-gradient-to-b from-gray-900 to-black">
       <div class="max-w-7xl mx-auto px-4 md:px-8 w-full">
-        <h2 class="text-5xl font-bold mb-16 text-center text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-white animate-fade-in">
+        <h2 class="text-5xl font-bold mb-16 text-center text-transparent bg-clip-text bg-gradient-to-r from-red-600 via-red-500 to-white animate-fade-in">
           Our Showroom
         </h2>
         
-        <!-- Filter dan Search Bar -->
+        <!-- Filter dan Search Bar dengan design yang lebih modern -->
         <div class="mb-12 flex flex-col md:flex-row gap-4 justify-between items-center">
           <div class="flex gap-4">
             <button v-for="category in categories" 
@@ -222,8 +289,8 @@
                     :class="[
                       'px-6 py-3 rounded-full transition-all duration-300 transform hover:scale-105',
                       selectedCategory === category.value 
-                        ? 'bg-red-600 text-white shadow-lg shadow-red-500/50' 
-                        : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                        ? 'bg-gradient-to-r from-red-600 to-red-700 text-white shadow-lg shadow-red-500/50' 
+                        : 'bg-gray-800/50 text-gray-300 hover:bg-gray-700/50'
                     ]">
               {{ category.label }}
             </button>
@@ -232,7 +299,7 @@
             <input type="text" 
                    v-model="searchQuery" 
                    placeholder="Search car name..." 
-                   class="w-full px-6 py-3 bg-gray-800/50 border border-gray-700 rounded-full focus:outline-none focus:ring-2 focus:ring-red-600 text-white placeholder-gray-400">
+                   class="w-full px-6 py-3 bg-gray-800/50 border border-gray-700 rounded-full focus:outline-none focus:ring-2 focus:ring-red-600 text-white placeholder-gray-400 transition-all duration-300">
             <svg xmlns="http://www.w3.org/2000/svg" 
                  class="h-5 w-5 absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400" 
                  fill="none" 
@@ -246,13 +313,13 @@
           </div>
         </div>
 
-        <!-- Grid Cars dengan Animasi -->
+        <!-- Grid Cars dengan animasi yang lebih smooth -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           <div v-for="(car, index) in filteredAndSearchedCars" 
                :key="car.id" 
                class="group relative overflow-hidden rounded-xl bg-gray-900/50 border border-gray-800 hover:border-red-500/50 transition-all duration-500"
                :class="`animate-fade-in-delay-${index % 6 + 1}`">
-            <!-- Car Image dengan Zoom Effect -->
+            <!-- Car Image dengan efek parallax -->
             <div class="relative h-80 overflow-hidden">
               <img :src="getImageUrl(car.image)" 
                    :alt="car.name" 
@@ -260,34 +327,43 @@
               <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
             </div>
 
-            <!-- Car Info dengan Slide Up Animation -->
+            <!-- Car Info dengan animasi slide up yang lebih smooth -->
             <div class="absolute inset-0 flex flex-col justify-end p-6 transform translate-y-8 group-hover:translate-y-0 transition-transform duration-500">
               <div class="space-y-4">
                 <div class="flex justify-between items-start">
                   <div>
-                    <h3 class="text-2xl font-bold text-white mb-2">{{ car.name }}</h3>
-                    <p class="text-red-500 text-xl font-semibold">${{ car.price.toLocaleString() }}</p>
+                    <h3 class="text-2xl font-bold text-white mb-2 transform transition-transform duration-500 group-hover:scale-105">
+                      {{ car.name }}
+                    </h3>
+                    <p class="text-red-500 text-xl font-semibold transform transition-transform duration-500 group-hover:scale-105">
+                      ${{ car.price.toLocaleString() }}
+                    </p>
                   </div>
-                  <span class="px-4 py-2 bg-red-600/20 text-red-500 rounded-full text-sm font-medium">
+                  <span class="px-4 py-2 bg-red-600/20 text-red-500 rounded-full text-sm font-medium transform transition-transform duration-500 group-hover:scale-105">
                     {{ car.type }}
                   </span>
                 </div>
                 
-                <p class="text-gray-300 text-sm line-clamp-2">{{ car.specifications }}</p>
+                <p class="text-gray-300 text-sm line-clamp-2 transform transition-transform duration-500 group-hover:scale-105">
+                  {{ car.specifications }}
+                </p>
                 
                 <div class="flex gap-4 pt-4">
                   <button @click="openCarDetail(car)" 
-                          class="flex-1 bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-full transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-red-500/50 flex items-center justify-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                          class="flex-1 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white px-6 py-3 rounded-full transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-red-500/50 flex items-center justify-center gap-2 group">
+                    <svg xmlns="http://www.w3.org/2000/svg" 
+                         class="h-5 w-5 transform transition-transform duration-300 group-hover:scale-110" 
+                         viewBox="0 0 20 20" 
+                         fill="currentColor">
                       <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
                       <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
                     </svg>
                     View Details
                   </button>
                   <button @click="toggleLike(car)" 
-                          class="bg-gray-800 hover:bg-gray-700 text-white p-3 rounded-full transition-all duration-300 transform hover:scale-105">
+                          class="bg-gray-800/50 hover:bg-gray-700/50 text-white p-3 rounded-full transition-all duration-300 transform hover:scale-105 group">
                     <svg xmlns="http://www.w3.org/2000/svg" 
-                         class="h-6 w-6" 
+                         class="h-6 w-6 transform transition-transform duration-300 group-hover:scale-110" 
                          :class="{'text-red-500': isLiked(car)}"
                          fill="none" 
                          viewBox="0 0 24 24" 
@@ -304,59 +380,64 @@
           </div>
         </div>
 
-        <!-- Empty State -->
+        <!-- Empty State dengan animasi yang lebih menarik -->
         <div v-if="filteredAndSearchedCars.length === 0" 
-             class="text-center py-12">
-          <svg xmlns="http://www.w3.org/2000/svg" 
-               class="h-16 w-16 mx-auto text-gray-600 mb-4" 
-               fill="none" 
-               viewBox="0 0 24 24" 
-               stroke="currentColor">
-            <path stroke-linecap="round" 
-                  stroke-linejoin="round" 
-                  stroke-width="2" 
-                  d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
+             class="text-center py-12 animate-fade-in">
+          <div class="relative">
+            <div class="absolute inset-0 bg-red-500/10 rounded-full blur-3xl transform scale-0 animate-pulse"></div>
+            <svg xmlns="http://www.w3.org/2000/svg" 
+                 class="h-16 w-16 mx-auto text-gray-600 mb-4 transform transition-transform duration-500 hover:scale-110" 
+                 fill="none" 
+                 viewBox="0 0 24 24" 
+                 stroke="currentColor">
+              <path stroke-linecap="round" 
+                    stroke-linejoin="round" 
+                    stroke-width="2" 
+                    d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
           <h3 class="text-xl font-semibold text-gray-400">No cars found</h3>
           <p class="text-gray-500 mt-2">Try adjusting your search or filter criteria</p>
         </div>
       </div>
     </div>
 
-    <!-- Modal Detail Mobil -->
-    <div v-if="showCarDetail && selectedCar" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm">
-      <div class="bg-gray-900 rounded-xl p-8 max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+    <!-- Modal Detail Mobil dengan design yang lebih modern -->
+    <div v-if="showCarDetail && selectedCar" 
+         class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-xl">
+      <div class="bg-gray-900 rounded-xl p-8 max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto transform transition-all duration-500 scale-100">
         <!-- Header Modal -->
         <div class="flex justify-between items-start mb-6">
           <div>
             <h2 class="text-3xl font-bold text-white mb-2">{{ selectedCar.name }}</h2>
             <p class="text-red-500 text-2xl font-semibold">${{ selectedCar.price.toLocaleString() }}</p>
           </div>
-          <button @click="showCarDetail = false" class="text-gray-400 hover:text-white transition-colors">
+          <button @click="showCarDetail = false" 
+                  class="text-gray-400 hover:text-white transition-colors transform hover:scale-110">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
         </div>
 
-        <!-- Image Gallery -->
-        <div class="relative h-96 mb-8 rounded-xl overflow-hidden">
+        <!-- Image Gallery dengan efek parallax -->
+        <div class="relative h-96 mb-8 rounded-xl overflow-hidden group">
           <img :src="getImageUrl(selectedCar.image)" 
                :alt="selectedCar.name" 
-               class="w-full h-full object-cover">
-          <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+               class="w-full h-full object-cover transform transition-transform duration-700 group-hover:scale-110">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent"></div>
         </div>
 
-        <!-- Specifications -->
+        <!-- Specifications dengan design yang lebih modern -->
         <div class="grid grid-cols-1 gap-8 mb-8">
           <div>
             <h3 class="text-xl font-semibold text-white mb-4">Specifications</h3>
             <div class="space-y-4">
-              <div class="flex justify-between items-center py-2 border-b border-gray-800">
+              <div class="flex justify-between items-center py-2 border-b border-gray-800 hover:border-red-500/50 transition-colors duration-300">
                 <span class="text-gray-400">Type</span>
                 <span class="text-white font-medium">{{ selectedCar.type }}</span>
               </div>
-              <div class="flex justify-between items-center py-2 border-b border-gray-800">
+              <div class="flex justify-between items-center py-2 border-b border-gray-800 hover:border-red-500/50 transition-colors duration-300">
                 <span class="text-gray-400">Specifications</span>
                 <span class="text-white font-medium">{{ selectedCar.specifications }}</span>
               </div>
@@ -364,7 +445,7 @@
           </div>
         </div>
 
-        <!-- Purchase Options -->
+        <!-- Purchase Options dengan design yang lebih menarik -->
         <div class="border-t border-gray-800 pt-8">
           <h3 class="text-xl font-semibold text-white mb-6">Purchase</h3>
           <div class="bg-gray-800/50 rounded-xl p-6 border border-gray-700 hover:border-red-500/50 transition-all duration-300">
@@ -377,8 +458,17 @@
             </div>
             <button @click="handlePurchase"
                     :disabled="isPurchasing"
-                    class="w-full bg-red-600 hover:bg-red-700 text-white px-6 py-4 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-red-500/50 text-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed">
-              {{ isPurchasing ? 'Processing...' : 'Purchase Now' }}
+                    class="w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white px-6 py-4 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-red-500/50 text-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed group">
+              <span class="flex items-center justify-center gap-2">
+                {{ isPurchasing ? 'Processing...' : 'Purchase Now' }}
+                <svg v-if="!isPurchasing" 
+                     xmlns="http://www.w3.org/2000/svg" 
+                     class="h-5 w-5 transform transition-transform duration-300 group-hover:translate-x-1" 
+                     viewBox="0 0 20 20" 
+                     fill="currentColor">
+                  <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+              </span>
             </button>
           </div>
         </div>
@@ -404,7 +494,8 @@ const authUser = computed(() => page.props.auth?.user)
 
 // User data
 const user = ref({
-  name: authUser.value?.name || authUser.value?.username || '',
+  name: authUser.value?.name || '',
+  username: authUser.value?.username || '',
   profile_photo: authUser.value?.profile_photo || null
 })
 
@@ -412,7 +503,8 @@ const user = ref({
 watch(authUser, (newUser) => {
   if (newUser) {
     user.value = {
-      name: newUser.name || newUser.username || '',
+      name: newUser.name || '',
+      username: newUser.username || '',
       profile_photo: newUser.profile_photo
     }
   }
@@ -420,7 +512,7 @@ watch(authUser, (newUser) => {
 
 // Form for profile update
 const form = useForm({
-  name: authUser.value?.name || authUser.value?.username || '',
+  name: authUser.value?.name || '',
   profile_photo: null
 })
 
@@ -496,18 +588,41 @@ const handlePhotoUpload = (event) => {
 }
 
 // Toggle like for a car
-const toggleLike = (car) => {
-  const index = likedCars.value.findIndex(c => c.id === car.id)
-  if (index === -1) {
-    likedCars.value.push(car)
-  } else {
-    likedCars.value.splice(index, 1)
+const toggleLike = async (car) => {
+  try {
+    const response = await axios.post('/liked-cars/toggle', {
+      car_id: car.id
+    });
+    
+    if (response.data.liked) {
+      likedCars.value.push(car);
+      showToast('Car added to favorites! ❤️');
+    } else {
+      const index = likedCars.value.findIndex(c => c.id === car.id);
+      if (index !== -1) {
+        likedCars.value.splice(index, 1);
+      }
+      showToast('Car removed from favorites');
+    }
+  } catch (error) {
+    console.error('Error toggling like:', error);
+    showToast('Failed to update favorites', 'error');
   }
 }
 
 // Check if a car is liked
 const isLiked = (car) => {
-  return likedCars.value.some(c => c.id === car.id)
+  return likedCars.value.some(c => c.id === car.id);
+}
+
+// Fetch liked cars
+const fetchLikedCars = async () => {
+  try {
+    const response = await axios.get('/liked-cars');
+    likedCars.value = response.data;
+  } catch (error) {
+    console.error('Error fetching liked cars:', error);
+  }
 }
 
 // Fungsi untuk mendapatkan URL gambar
@@ -649,10 +764,33 @@ const handlePurchase = async () => {
   }
 }
 
+// Update order status
+const updateOrderStatus = async (order, newStatus) => {
+  try {
+    const response = await axios.put(`/purchases/${order.id}/status`, {
+      status: newStatus
+    });
+    
+    // Update order status di local state
+    const index = orders.value.findIndex(o => o.id === order.id);
+    if (index !== -1) {
+      orders.value[index].status = newStatus;
+    }
+    
+    showToast(`Order status updated to ${newStatus}`);
+  } catch (error) {
+    console.error('Error updating order status:', error);
+    showToast('Failed to update order status', 'error');
+  }
+}
+
 // Mengambil data mobil saat komponen dimount
 onMounted(() => {
+  console.log('Auth User:', authUser.value)
+  console.log('User Data:', user.value)
   fetchCars()
   fetchOrders()
+  fetchLikedCars()
 })
 </script>
 
@@ -665,8 +803,28 @@ onMounted(() => {
   100% { transform: scale(1); }
 }
 
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+  100% { transform: translateY(0px); }
+}
+
+@keyframes float-delay {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(20px); }
+  100% { transform: translateY(0px); }
+}
+
 .animate-zoom {
   animation: zoom 20s infinite ease-in-out;
+}
+
+.animate-float {
+  animation: float 6s infinite ease-in-out;
+}
+
+.animate-float-delay {
+  animation: float-delay 6s infinite ease-in-out;
 }
 
 /* Fade In Animations */

@@ -58,4 +58,20 @@ class PurchaseController extends Controller
             ], 500);
         }
     }
+
+    public function updateStatus(Request $request, Purchase $purchase)
+    {
+        $request->validate([
+            'status' => 'required|in:pending,completed,cancelled'
+        ]);
+
+        $purchase->update([
+            'status' => $request->status
+        ]);
+
+        return response()->json([
+            'message' => 'Status updated successfully',
+            'purchase' => $purchase
+        ]);
+    }
 } 
