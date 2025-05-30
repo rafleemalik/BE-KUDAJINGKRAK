@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Admin\CarController;
 use App\Http\Controllers\Lat1Controller;
+use App\Http\Controllers\API\PurchaseController;
 
 Route::inertia('/', 'Home')->name('home');
 
@@ -33,7 +34,11 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::get('/admin/cars', [CarController::class, 'index'])->name('admin.cars.index');
-Route::get('/latihan1', [Lat1Controller::class, 'index']);
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/purchases', [PurchaseController::class, 'index']);
+    Route::post('/purchases', [PurchaseController::class, 'store']);
+});
 
 
 

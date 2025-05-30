@@ -4,6 +4,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\CarController;
 use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\API\LikedCarController;
+use App\Http\Controllers\API\PurchaseController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,4 +36,14 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/{id}', [CarController::class, 'destroy']);
         Route::get('/type/{type}', [CarController::class, 'getByType']);
     });
+
+    // Liked Cars Routes
+    Route::prefix('liked-cars')->group(function () {
+        Route::post('/toggle', [LikedCarController::class, 'toggleLike']);
+        Route::get('/', [LikedCarController::class, 'getLikedCars']);
+    });
+
+    // Purchase Routes
+    Route::get('/purchases', [PurchaseController::class, 'index']);
+    Route::post('/purchases', [PurchaseController::class, 'store']);
 });

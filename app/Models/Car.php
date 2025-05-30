@@ -21,4 +21,9 @@ class Car extends Model
     protected $casts = [
         'price' => 'float'
     ];
+
+    public function likedBy()
+    {
+        return $this->hasMany(LikedCar::class);
+    }
 }

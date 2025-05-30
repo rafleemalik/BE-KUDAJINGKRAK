@@ -29,4 +29,9 @@ class User extends Authenticatable
     ];
 
     // Pastikan tidak ada method yang hilang di sini!
+
+    public function likedCars()
+    {
+        return $this->hasMany(LikedCar::class);
+    }
 }
