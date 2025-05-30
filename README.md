@@ -1,13 +1,39 @@
-## After cloning this repo, do the following steps:
-1. `composer install`
-2. `npm install`
-3. Duplicate the `.env.example` file and rename it to `.env`
-4. Create the `database.sqlite` in database directory
-5. Run `php artisan migrate`
-6. Run `php artisan key:generate`
-7. Run `php artisan serve`
-8. Run `npm run dev`
+# Ferrari Showroom
 
+## Setup Database
+
+1. Copy `.env.example` ke `.env`
+2. Generate app key:
+   ```bash
+   php artisan key:generate
+   ```
+3. Setup database:
+   ```bash
+   php artisan migrate:fresh --seed
+   ```
+4. Link storage:
+   ```bash
+   php artisan storage:link
+   ```
+
+## Run Application
+
+1. Install dependencies:
+   ```bash
+   composer install
+   npm install
+   ```
+
+2. Run development server:
+   ```bash
+   php artisan serve
+   npm run dev
+   ```
+
+## Default Admin Account
+
+- Email: admin@ferrari.com
+- Password: password123
 
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
