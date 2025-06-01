@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\Admin\CarController;
+use App\Http\Controllers\API\CarController;
 use App\Http\Controllers\API\PurchaseController;
 use App\Http\Controllers\API\LikedCarController;
 
@@ -23,21 +23,19 @@ Route::post('/register', [AuthController::class, 'register']);
 
 // Admin Routes
 Route::inertia('/admin', 'Admin/AdminDashboard')->name('admin.dashboard');
-Route::get('/admin/cars', [CarController::class, 'index'])->name('admin.cars.index');
 
-// Car API Routes
-Route::get('/api/cars', [CarController::class, 'getCars']);
-Route::post('/api/cars', [CarController::class, 'store']);
-Route::delete('/api/cars/{car}', [CarController::class, 'destroy']);
-Route::put('/api/cars/{car}', [CarController::class, 'update']);
+// Car Admin Routes
+Route::get('/admin/cars', [CarController::class, 'index']);
+Route::post('/admin/cars', [CarController::class, 'store']);
+Route::delete('/admin/cars/{car}', [CarController::class, 'destroy']);
+Route::put('/admin/cars/{car}', [CarController::class, 'update']);
 
 // User Routes
 Route::inertia('/ferrari', 'User/Ferrari')->name('ferrari');
+Route::get('/cars', [CarController::class, 'index']);
 
 // Protected Routes
 Route::middleware(['auth'])->group(function () {
-    // Profile Routes
-    Route::post('/profile/update', [AuthController::class, 'updateProfile'])->name('profile.update');
     
     // Purchase Routes
     Route::get('/purchases', [PurchaseController::class, 'index']);

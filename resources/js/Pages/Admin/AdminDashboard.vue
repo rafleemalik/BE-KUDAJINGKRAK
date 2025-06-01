@@ -258,7 +258,7 @@ const addCar = () => {
   formData.append('image', newCar.value.image)
   formData.append('type', newCar.value.type)
 
-  axios.post('/api/cars', formData, {
+  axios.post('/admin/cars', formData, {
     headers: { 'Content-Type': 'multipart/form-data' },
   }).then(res => {
     cars.value.push(res.data.car)
@@ -293,7 +293,7 @@ const updateCar = () => {
   }
   formData.append('_method', 'PUT')
 
-  axios.post(`/api/cars/${editCarData.value.id}`, formData, {
+  axios.post(`/admin/cars/${editCarData.value.id}`, formData, {
     headers: { 'Content-Type': 'multipart/form-data' },
   }).then(res => {
     const index = cars.value.findIndex(car => car.id === editCarData.value.id)
@@ -313,9 +313,8 @@ const cancelEdit = () => {
 
 const deleteCar = (index) => {
   const carToDelete = filteredCars.value[index]
-  axios.delete(`/api/cars/${carToDelete.id}`).then(res => {
+  axios.delete(`/admin/cars/${carToDelete.id}`).then(res => {
     if (res.status === 200) {
-      // Remove from the original cars array
       const originalIndex = cars.value.findIndex(car => car.id === carToDelete.id)
       if (originalIndex !== -1) cars.value.splice(originalIndex, 1)
     }
@@ -324,7 +323,7 @@ const deleteCar = (index) => {
 
 const fetchCars = async () => {
   try {
-    const res = await axios.get('/api/cars')
+    const res = await axios.get('/admin/cars')
     cars.value = res.data
   } catch (err) {
     console.error("Error fetching cars:", err)

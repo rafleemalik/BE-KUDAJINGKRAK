@@ -9,12 +9,10 @@
     @vite('resources/js/app.js')
     @inertiaHead
     @routes
-     <!-- Tag untuk favicon -->
     <link rel="icon" href="{{ asset('images/kudajingkrak.png') }}" type="image/png" sizes="any">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jingkrak Autosport</title>
-    <!-- Tag lain yang kamu butuhkan -->
 </head>
 
 <body>

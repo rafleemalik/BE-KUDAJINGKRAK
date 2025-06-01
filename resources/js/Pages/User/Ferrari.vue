@@ -41,7 +41,7 @@
           <button @click="showProfile = !showProfile" 
                   class="flex items-center gap-2 hover:text-red-500 transition-all duration-300 group">
             <div class="relative">
-              <img :src="user.profile_photo || '/images/leclerc.jpg'" 
+              <img :src="user.profile_photo" 
                    alt="Profile" 
                    class="w-12 h-12 rounded-full object-cover border-2 border-red-500 transition-all duration-300 group-hover:scale-110 group-hover:border-red-400">
               <div class="absolute inset-0 rounded-full bg-gradient-to-r from-red-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -96,7 +96,7 @@
         <div class="space-y-6">
           <!-- Profile Photo -->
           <div class="flex items-center gap-4">
-            <img :src="user.profile_photo || '/images/leclerc.jpg'" 
+            <img :src="user.profile_photo" 
                  alt="Profile" 
                  class="w-24 h-24 rounded-full object-cover border-2 border-red-500">
             <div>
@@ -480,8 +480,7 @@
 <script setup>
 import { router } from '@inertiajs/vue3'
 import { ref, computed, onMounted, watch } from 'vue'
-import { usePage } from '@inertiajs/vue3'
-import { useForm } from '@inertiajs/vue3'
+import { usePage, useForm } from '@inertiajs/vue3'
 import axios from 'axios'
 
 // Konfigurasi axios
@@ -496,7 +495,7 @@ const authUser = computed(() => page.props.auth?.user)
 const user = ref({
   name: authUser.value?.name || '',
   username: authUser.value?.username || '',
-  profile_photo: authUser.value?.profile_photo || null
+  profile_photo: '/images/leclerc.jpg' // Default profile photo
 })
 
 // Watch for changes in auth user
@@ -505,20 +504,18 @@ watch(authUser, (newUser) => {
     user.value = {
       name: newUser.name || '',
       username: newUser.username || '',
-      profile_photo: newUser.profile_photo
+      profile_photo: '/images/leclerc.jpg' // Default profile photo
     }
   }
 }, { immediate: true })
 
 // Form for profile update
 const form = useForm({
-  name: authUser.value?.name || '',
-  profile_photo: null
+  name: authUser.value?.name || ''
 })
 
 // Profile modal state
 const showProfile = ref(false)
-const photoInput = ref(null)
 
 // Categories
 const categories = [
@@ -566,24 +563,11 @@ const filteredAndSearchedCars = computed(() => {
 // Fungsi untuk mengambil data mobil
 const fetchCars = async () => {
   try {
-    const response = await axios.get('/api/cars')
+    const response = await axios.get('/cars')
     cars.value = response.data
     console.log('Cars loaded:', cars.value) // Debug log
   } catch (error) {
     console.error('Error fetching cars:', error)
-  }
-}
-
-// Handle photo upload
-const handlePhotoUpload = (event) => {
-  const file = event.target.files[0]
-  if (file) {
-    form.profile_photo = file
-    const reader = new FileReader()
-    reader.onload = (e) => {
-      user.value.profile_photo = e.target.result
-    }
-    reader.readAsDataURL(file)
   }
 }
 

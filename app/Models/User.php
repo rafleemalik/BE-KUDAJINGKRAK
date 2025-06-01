@@ -13,10 +13,8 @@ class User extends Authenticatable
     // Kolom dan properti lainnya
     protected $fillable = [
         'username',
-        'name_web',
         'password',
         'role',
-        'profile_photo'
     ];
 
     protected $hidden = [
@@ -28,7 +26,7 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    // Pastikan tidak ada method yang hilang di sini!
+
 
     public function likedCars()
     {

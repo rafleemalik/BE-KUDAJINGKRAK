@@ -15,6 +15,6 @@ class AdminMiddleware
             return $next($request);
         }
 
-        return redirect('/'); // Redirect ke halaman utama atau login jika bukan admin
+        return redirect('/login'); // Redirect ke halaman utama atau login jika bukan admin
     }
 }

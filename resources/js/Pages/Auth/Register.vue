@@ -16,13 +16,6 @@
         Register To Ferrari!
       </h1>
 
-      <!-- TOAST NOTIFICATION -->
-      <transition name="toast">
-        <div v-if="flashMessage" class="fixed top-6 right-6 bg-green-600 text-white px-4 py-2 rounded-md shadow-lg z-50">
-          {{ flashMessage }}
-        </div>
-      </transition>
-
       <!-- Form -->
       <div class="z-10 w-full max-w-sm p-8 bg-black bg-opacity-80 rounded-xl shadow-lg">
         <form @submit.prevent="submit">
@@ -56,26 +49,13 @@
 </template>
 
 <script setup>
-import { useForm, usePage } from '@inertiajs/vue3'
+import { useForm } from '@inertiajs/vue3'
 import { Link } from '@inertiajs/vue3'
-import { ref, watchEffect } from 'vue'
 
 const form = useForm({
   username: '',
   password: '',
   password_confirmation: ''
-})
-
-// Tangkap flash message dari backend
-const flashMessage = ref(usePage().props.flash?.success || '')
-
-// Hilangkan toast setelah 3 detik
-watchEffect(() => {
-  if (flashMessage.value) {
-    setTimeout(() => {
-      flashMessage.value = ''
-    }, 3000)
-  }
 })
 
 const submit = () => {
@@ -108,15 +88,6 @@ const submit = () => {
   transition: opacity 0.8s;
 }
 .fade-enter-from, .fade-leave-to {
-  opacity: 0;
-}
-
-/* TOAST NOTIFICATION ANIMATION */
-.toast-enter-active, .toast-leave-active {
-  transition: all 0.5s ease;
-}
-.toast-enter-from, .toast-leave-to {
-  transform: translateY(-20px);
   opacity: 0;
 }
 </style>

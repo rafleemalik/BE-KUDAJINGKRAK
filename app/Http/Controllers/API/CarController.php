@@ -13,10 +13,7 @@ class CarController extends Controller
     public function index()
     {
         $cars = Car::all();
-        return response()->json([
-            'status' => 'success',
-            'data' => $cars
-        ]);
+        return response()->json($cars);
     }
 
     // Get car by id
@@ -40,9 +37,9 @@ class CarController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
-            'description' => 'required|string',
+            'specifications' => 'required|string',
             'price' => 'required|numeric',
-            'type' => 'required|string|in:Sport,Hybrid,GT,SUV',
+            'type' => 'required|string|in:sport,hybrid,gt,suv',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
@@ -57,7 +54,7 @@ class CarController extends Controller
 
         $car = Car::create([
             'name' => $request->name,
-            'description' => $request->description,
+            'specifications' => $request->specifications,
             'price' => $request->price,
             'type' => $request->type,
             'image' => $imagePath
@@ -83,9 +80,9 @@ class CarController extends Controller
 
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
-            'description' => 'required|string',
+            'specifications' => 'required|string',
             'price' => 'required|numeric',
-            'type' => 'required|string|in:Sport,Hybrid,GT,SUV',
+            'type' => 'required|string|in:sport,hybrid,gt,suv',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
@@ -98,7 +95,7 @@ class CarController extends Controller
 
         $data = [
             'name' => $request->name,
-            'description' => $request->description,
+            'specifications' => $request->specifications,
             'price' => $request->price,
             'type' => $request->type
         ];
