@@ -511,7 +511,7 @@ watch(authUser, (newUser) => {
 
 // Form for profile update
 const form = useForm({
-  name: authUser.value?.name || ''
+  name: ''
 })
 
 // Profile modal state
@@ -613,19 +613,6 @@ const fetchLikedCars = async () => {
 const getImageUrl = (imagePath) => {
   if (!imagePath) return '/images/default-car.jpg'
   return `http://127.0.0.1:8000/storage/${imagePath}`
-}
-
-// Update profile
-const updateProfile = () => {
-  form.post('/profile', {
-    preserveScroll: true,
-    onSuccess: () => {
-      showProfile.value = false
-    },
-    onError: (errors) => {
-      console.log('Errors:', errors)
-    }
-  })
 }
 
 const logout = () => {
